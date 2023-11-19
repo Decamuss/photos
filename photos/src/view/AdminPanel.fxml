@@ -1,15 +1,16 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-
 <VBox xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AdminPanelController">
+    <!-- ListView for displaying users -->
     <ListView fx:id="userList" />
+
+    <!-- TextField for entering new user's name -->
+    <TextField fx:id="newUserField" promptText="Enter new user name"/>
+
+    <!-- Buttons for adding and deleting users -->
     <HBox spacing="10">
         <Button text="Add User" onAction="#handleAddUser"/>
         <Button text="Delete User" onAction="#handleDeleteUser"/>
-        <!-- Remove the onAction attribute for the List Users button -->
-        <Button text="List Users"/>
     </HBox>
 </VBox>
-
-

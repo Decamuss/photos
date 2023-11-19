@@ -18,7 +18,7 @@ public class AdminController {
         try {
             users = DataManager.loadUsers(); // Adjusted to match DataManager
             updateListView();
-        } catch (IOException | ClassNotFoundException e) {
+        } catch (IOException e) {
             e.printStackTrace();
             // Handle exceptions
         }
