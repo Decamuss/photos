@@ -21,25 +21,58 @@ import java.util.ResourceBundle;
 import java.net.URL;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import model.Photo;
+
 
 public class AlbumsListController implements Initializable {
     ObservableList<Album> albumList = FXCollections.observableArrayList();
     @FXML
     Button LogoutButton;
     @FXML
+    Button EditButton;
+    @FXML
     private ListView<Album> realAlbumList;
+
+   
+
     @Override
     public void initialize(URL location, ResourceBundle bundle)
     {
         albumList.addAll(User.currentUser.getAlbums());
         realAlbumList.setItems(albumList);
+         realAlbumList.getSelectionModel().selectedIndexProperty().addListener( (obs, oldVal, newVal) -> {
+        if (newVal.intValue() >= 0) { // Make sure an item is selected
+            Album selectedAlbum = realAlbumList.getItems().get(newVal.intValue());
+            if(Photo.tempMove != null)
+            {
+                selectedAlbum.addPhoto(Photo.tempMove);
+                Photo.tempMove = null;
+            }
+            else if(Photo.tempCopy != null)
+            {
+                selectedAlbum.addPhoto(Photo.tempCopy);
+                Photo.tempCopy = null;
+            }
+        }
+    });
     }
 
 
     @FXML
     void AddRequest(ActionEvent event) {
-
+        try{
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AlbumDisplay.fxml"));
+            Stage stage = (Stage) EditButton.getScene().getWindow();
+            Scene scene = new Scene(loader.load());
+            stage.setScene(scene);
+            stage.show();
+        }
+        catch(IOException e)
+        {
+             e.printStackTrace();
+        }
     }
+    
 
     @FXML
     void DeleteRequest(ActionEvent event) {
@@ -50,7 +83,18 @@ public class AlbumsListController implements Initializable {
 
     @FXML
     void EditRequest(ActionEvent event) {
-        
+        Album.currentAlbum = realAlbumList.getSelectionModel().getSelectedItem();
+        try{
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AlbumDisplay.fxml"));
+            Stage stage = (Stage) EditButton.getScene().getWindow();
+            Scene scene = new Scene(loader.load());
+            stage.setScene(scene);
+            stage.show();
+        }
+        catch(IOException e)
+        {
+             e.printStackTrace();
+        }
     }
 
     @FXML

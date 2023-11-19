@@ -8,6 +8,7 @@ public class Album implements Serializable {
     private static final long serialVersionUID = 1L;
     private String name;
     private List<Photo> photos; // Assuming you have a Photo class
+    public static Album currentAlbum;
 
     public Album(String name) {
         this.name = name;
@@ -37,5 +38,14 @@ public class Album implements Serializable {
         return name;
     }
 
+    public void removePhoto(Photo photo)
+    {
+        this.photos.remove(photo);
+    }
+
+     public void addPhoto(Photo photo)
+    {
+        this.photos.add(photo);
+    }
     // Add more methods as needed
 }
