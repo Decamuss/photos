@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<GridPane fx:controller="LoginController"
+<GridPane fx:controller="controller.LoginController"
           xmlns:fx="http://javafx.com/fxml/1" alignment="center" hgap="10" vgap="10">
     <children>
-        <!-- Define rows and columns here if needed -->
         <TextField fx:id="usernameField" GridPane.rowIndex="0" GridPane.columnIndex="0" promptText="Username"/>
         <Button text="Login" GridPane.rowIndex="1" GridPane.columnIndex="0" onAction="#handleLogin"/>
     </children>
