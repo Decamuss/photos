@@ -1,5 +1,7 @@
 package utils;
 
+import model.User;
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,7 +11,7 @@ import model.User;
 
 public class DataManager {
 
-    private static final String FILE_PATH = "path_to_your_data_file"; // Update this with your actual file path
+    private static final String FILE_PATH = "photos/data/users.ser"; // Updated file path
 
     public static void saveUsers(List<User> users) throws IOException {
         try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(FILE_PATH))) {
@@ -17,22 +19,38 @@ public class DataManager {
         }
     }
 
-    public static List<User> loadUsers() throws IOException, ClassNotFoundException {
+    public static List<User> loadUsers() throws IOException {
         File file = new File(FILE_PATH);
         if (!file.exists()) {
-            return new ArrayList<>();
+            file.getParentFile().mkdirs(); // Create parent directories if they don't exist
+            file.createNewFile(); // Create a new empty file 'users.ser'
+            return new ArrayList<>(); // Return an empty list of type User
         }
-
-        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(FILE_PATH))) {
-            return (List<User>) in.readObject();
+    
+        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(file))) {
+            Object readObject = in.readObject();
+            if (readObject instanceof List) {
+                return (List<User>) readObject;
+            } else {
+                return new ArrayList<>(); // Return an empty list if the file doesn't contain a List object
+            }
+        } catch (EOFException | ClassNotFoundException e) {
+            return new ArrayList<>(); // Return an empty list if there is an EOFException or ClassNotFoundException
         }
     }
+    
 
-    public static void addUser(User user) throws IOException, ClassNotFoundException {
-        List<User> users = loadUsers();
-        users.add(user);
-        saveUsers(users);
+    public static void addUser(User user) {
+        try {
+            List<User> users = loadUsers();
+            users.add(user);
+            saveUsers(users);
+        } catch (IOException e) {
+            e.printStackTrace();
+            // Handle IOException (e.g., log the error, notify the user)
+        }
     }
+    
 
     public static void deleteUser(String username) throws IOException, ClassNotFoundException {
         List<User> users = loadUsers();

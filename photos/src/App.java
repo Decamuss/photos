@@ -16,12 +16,9 @@ public class App extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         // Load users
-        try {
-            users = DataManager.loadUsers();
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-            // Handle the exception, maybe show an alert to the user
-        }
+
+        users = DataManager.loadUsers();
+        
 
         Parent root = FXMLLoader.load(getClass().getResource("/view/login.fxml"));
         primaryStage.setTitle("Photo Application");
@@ -29,13 +26,7 @@ public class App extends Application {
         primaryStage.show();
 
         primaryStage.setOnCloseRequest(event -> {
-            // Save users when closing application
-            try {
-                DataManager.saveUsers(users);
-            } catch (IOException e) {
-                e.printStackTrace();
-                // Handle the exception, maybe show an alert to the user
-            }
+
         });
     }
 
