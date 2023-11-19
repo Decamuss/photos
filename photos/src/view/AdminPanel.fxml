@@ -1,12 +1,15 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AdminController">
+
+<VBox xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AdminPanelController">
     <ListView fx:id="userList" />
     <HBox spacing="10">
         <Button text="Add User" onAction="#handleAddUser"/>
         <Button text="Delete User" onAction="#handleDeleteUser"/>
-        <Button text="List Users" onAction="#handleListUsers"/>
+        <!-- Remove the onAction attribute for the List Users button -->
+        <Button text="List Users"/>
     </HBox>
 </VBox>
+
+

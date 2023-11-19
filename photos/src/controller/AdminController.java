@@ -16,7 +16,7 @@ public class AdminController {
 
     public void initialize() {
         try {
-            users = DataManager.loadUsers("path/to/users.dat");
+            users = DataManager.loadUsers(); // Adjusted to match DataManager
             updateListView();
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();

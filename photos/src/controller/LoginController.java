@@ -4,6 +4,10 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert;
 import javafx.event.ActionEvent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+import javafx.fxml.FXMLLoader;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -17,9 +21,22 @@ public class LoginController {
     private void handleLogin(ActionEvent event) {
         String username = usernameField.getText();
         if (validUsers.contains(username)) {
-            // Proceed to main application
-            // For now, just show a success message
-            showAlert("Login Successful", "Welcome, " + username + "!");
+            if ("admin".equals(username)) {
+                // Launch admin panel
+                try {
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AdminPanel.fxml"));
+                    Stage stage = (Stage) usernameField.getScene().getWindow();
+                    Scene scene = new Scene(loader.load());
+                    stage.setScene(scene);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    showAlert("Error", "Failed to load admin panel.");
+                }
+            } else {
+                // Handle regular user login
+                showAlert("Login Successful", "Welcome, " + username + "!");
+                // Here you would typically load the main application scene for regular users
+            }
         } else {
             // Show error message
             showAlert("Login Failed", "Invalid username.");
