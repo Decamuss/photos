@@ -1,8 +1,12 @@
 package controller;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 import model.User;
 import utils.DataManager;
 
@@ -10,7 +14,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-
+import javafx.scene.control.Button;
 public class AdminPanelController {
 
     @FXML
@@ -19,7 +23,9 @@ public class AdminPanelController {
     @FXML
     private TextField newUserField;
 
-    private List<User> users; // List to hold users
+    @FXML
+    private Button logoutButton;
+
 
     // Initialize method
     @FXML
@@ -43,11 +49,24 @@ public class AdminPanelController {
         }
     }
 
+    private void showError(String message) {
+    Alert alert = new Alert(Alert.AlertType.ERROR);
+    alert.setTitle("Error");
+    alert.setHeaderText(null);
+    alert.setContentText(message);
+    alert.showAndWait();
+}
 
     // Method to handle adding a new user
     @FXML
     private void handleAddUser() {
-        String username = newUserField.getText();
+        String username = newUserField.getText().trim(); // Trim to remove any leading/trailing spaces
+
+        if ("admin".equalsIgnoreCase(username) || "stock".equalsIgnoreCase(username)) {
+            // Show an error message to the user instead of throwing an exception
+            showError("The username '" + username + "' is not allowed.");
+            return; // Return to prevent further processing
+        }
         if (!username.isEmpty()) {
             try {
                 DataManager.addUser(new User(username));
@@ -77,6 +96,32 @@ public class AdminPanelController {
         }
         // Add error handling if needed
     }
+
+    @FXML
+    private void handleLogout() {
+        // Close the current stage (admin panel)
+        Stage stage = (Stage) logoutButton.getScene().getWindow();
+        stage.close();
+
+        // Optionally, open the login window again
+        showLoginScreen();
+    }
+
+    private void showLoginScreen() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/login.fxml"));
+            Stage loginStage = new Stage();
+            loginStage.setScene(new Scene(loader.load(), 300, 275));
+
+            loginStage.setTitle("Photo Application");
+            loginStage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+            // Handle the exception, maybe show an error message
+        }
+    }
+
+
 
     // Add more methods as needed
 }
