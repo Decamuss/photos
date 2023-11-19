@@ -11,7 +11,7 @@ public class Album implements Serializable {
 
     public Album(String name) {
         this.name = name;
-        this.photos = new ArrayList<>();
+        this.photos = new ArrayList<Photo>();
     }
 
     // Getters and setters
@@ -29,6 +29,12 @@ public class Album implements Serializable {
 
     public void setPhotos(List<Photo> photos) {
         this.photos = photos;
+    }
+
+    @Override
+    public String toString() {
+       
+        return name;
     }
 
     // Add more methods as needed

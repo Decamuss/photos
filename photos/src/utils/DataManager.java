@@ -1,11 +1,11 @@
 package utils;
 
-import model.User;
-
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import model.User;
 
 public class DataManager {
 

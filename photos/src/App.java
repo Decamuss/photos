@@ -3,8 +3,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import utils.DataManager;
 import model.User;
+import utils.DataManager;
 
 import java.io.IOException;
 import java.util.List;

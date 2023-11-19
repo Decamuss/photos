@@ -8,10 +8,11 @@ public class User implements Serializable {
     private static final long serialVersionUID = 1L;
     private String username;
     private List<Album> albums;
+    public static User currentUser;
 
     public User(String username) {
         this.username = username;
-        this.albums = new ArrayList<>();
+        this.albums = new ArrayList<Album>();
     }
 
     // Getters and setters
@@ -29,6 +30,15 @@ public class User implements Serializable {
 
     public void setAlbums(List<Album> albums) {
         this.albums = albums;
+    }
+
+    public void addAlbums(Album album){
+        this.albums.add(album);
+    }
+
+    public void removeAlbum(Album album)
+    {
+        this.albums.remove(album);
     }
 
     // Add more methods as needed
