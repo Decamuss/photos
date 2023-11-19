@@ -26,13 +26,7 @@ public class App extends Application {
         primaryStage.show();
 
         primaryStage.setOnCloseRequest(event -> {
-            // Save users when closing application
-            try {
-                DataManager.saveUsers(users);
-            } catch (IOException e) {
-                e.printStackTrace();
-                // Handle the exception, maybe show an alert to the user
-            }
+
         });
     }
 
