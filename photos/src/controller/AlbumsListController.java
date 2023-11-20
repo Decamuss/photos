@@ -60,7 +60,7 @@ public class AlbumsListController implements Initializable {
 
     @FXML
     void AddRequest(ActionEvent event) {
-        User.currentUser.addAlbums(new Album("new"));
+        //User.currentUser.addAlbums(new Album("new"));
         try{
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AlbumDisplay.fxml"));
             Stage stage = (Stage) EditButton.getScene().getWindow();

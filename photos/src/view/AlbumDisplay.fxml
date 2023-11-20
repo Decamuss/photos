@@ -6,9 +6,9 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.Pane?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AlbumDisplayController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="443.0" prefWidth="661.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AlbumDisplayController">
    <children>
-      <TableView fx:id="realPhotoList" layoutX="28.0" layoutY="42.0" prefHeight="333.0" prefWidth="537.0">
+      <TableView fx:id="realPhotoList" layoutX="28.0" layoutY="42.0" prefHeight="392.0" prefWidth="611.0">
         <columns>
           <TableColumn fx:id="ThumbnailPhoto" prefWidth="134.0" text="Thumbnail" />
           <TableColumn fx:id="CaptionPhoto" prefWidth="402.0" text="Caption" />
@@ -19,7 +19,8 @@
       <Button fx:id="RemovePhotoButton" layoutX="228.0" layoutY="14.0" mnemonicParsing="false" onAction="#RemovePhotoRequest" text="Remove" />
       <Button fx:id="EditPhotoButton" layoutX="297.0" layoutY="14.0" mnemonicParsing="false" onAction="#EditPhotoRequest" text="Edit Photo" />
       <Button fx:id="MoveButton" layoutX="379.0" layoutY="14.0" mnemonicParsing="false" onAction="#MoveRequest" text="Move" />
-      <Button fx:id="CopyButton" layoutX="436.0" layoutY="14.0" mnemonicParsing="false" onAction="#CopyRequest" text="Copy" />
-      <Button fx:id="BackButton" layoutX="524.0" layoutY="14.0" mnemonicParsing="false" onAction="#ReturnRequest" text="Back" />
+      <Button fx:id="CopyButton" layoutX="435.0" layoutY="14.0" mnemonicParsing="false" onAction="#CopyRequest" text="Copy" />
+      <Button fx:id="BackButton" layoutX="598.0" layoutY="14.0" mnemonicParsing="false" onAction="#ReturnRequest" text="Back" />
+      <Button fx:id="SaveButton" layoutX="488.0" layoutY="14.0" mnemonicParsing="false" onAction="#SaveRequest" text="Save" />
    </children>
 </Pane>

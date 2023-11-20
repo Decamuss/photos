@@ -202,7 +202,7 @@ public class AlbumDisplayController implements Initializable{
         
           if(Album.currentAlbum == null) 
         {
-            Album newAlbum = new Album(null);
+            Album newAlbum = new Album("new");
             Album.currentAlbum = newAlbum;
             User.currentUser.addAlbums(newAlbum);
         }
