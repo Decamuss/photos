@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
@@ -131,34 +132,44 @@ public class AlbumDisplayController implements Initializable{
         }
     }
 
+    
     @FXML
     void MoveRequest(ActionEvent event) {
-    Photo.tempMove = realPhotoList.getSelectionModel().getSelectedItem();
-    Photo photoToRemove = Photo.tempMove;
-    Album.currentAlbum.removePhoto(photoToRemove);
-    Album.currentAlbum = null;
+        Photo.tempMove = realPhotoList.getSelectionModel().getSelectedItem();
+        Photo photoToRemove = Photo.tempMove;
+        Album.currentAlbum.removePhoto(photoToRemove);
+        Album.currentAlbum = null;
     
-    photoList.remove(photoToRemove);
-            try {
-            DataManager.saveUsers(Arrays.asList(User.currentUser)); // Assuming User.currentUser contains the current user's data
+        photoList.remove(photoToRemove);
+        try {
+            // Load all users
+            List<User> users = DataManager.loadUsers();
+            // Find and update the current user in the list
+            for (User user : users) {
+                if (user.getUsername().equals(User.currentUser.getUsername())) {
+                    user.setAlbums(User.currentUser.getAlbums());
+                    break;
+                }
+            }
+            // Save all users
+            DataManager.saveUsers(users);
             showAlert("Success", "Data saved successfully.");
         } catch (IOException e) {
             e.printStackTrace();
             showAlert("Error", "Failed to save data.");
         }
-     try{
+        try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AlbumsListPage.fxml"));
             Stage stage = (Stage) BackButton.getScene().getWindow();
             Scene scene = new Scene(loader.load());
             stage.setScene(scene);
             stage.show();
-        }
-        catch(IOException e)
-        {
-             e.printStackTrace();
+        } catch(IOException e) {
+            e.printStackTrace();
         }
     }
-
+    
+    
     @FXML
     void RemovePhotoRequest(ActionEvent event) {
     Photo photoToRemove =realPhotoList.getSelectionModel().getSelectedItem();
@@ -181,7 +192,6 @@ public class AlbumDisplayController implements Initializable{
              e.printStackTrace();
         }
     }
-
     @FXML
     void SaveRequest(ActionEvent event) {
         String albumName = Album.currentAlbum.getName().trim();
@@ -201,15 +211,34 @@ public class AlbumDisplayController implements Initializable{
             return;
         }
     
+        // Update current user's album list if necessary
+        if (!User.currentUser.getAlbums().contains(Album.currentAlbum)) {
+            User.currentUser.getAlbums().add(Album.currentAlbum);
+        }
+    
         // Proceed with saving
         try {
-            DataManager.saveUsers(Arrays.asList(User.currentUser)); // Assuming User.currentUser contains the current user's data
+            // Load all users
+            List<User> allUsers = DataManager.loadUsers();
+    
+            // Update the current user in the list
+            for (int i = 0; i < allUsers.size(); i++) {
+                if (allUsers.get(i).getUsername().equals(User.currentUser.getUsername())) {
+                    allUsers.set(i, User.currentUser);
+                    break;
+                }
+            }
+    
+            // Save all users
+            DataManager.saveUsers(allUsers);
             showAlert("Success", "Data saved successfully.");
         } catch (IOException e) {
             e.printStackTrace();
             showAlert("Error", "Failed to save data.");
         }
     }
+    
+
 
     private void showAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);

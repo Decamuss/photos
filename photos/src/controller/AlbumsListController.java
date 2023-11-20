@@ -127,11 +127,26 @@ public class AlbumsListController implements Initializable {
             if (isDuplicateAlbumName(albumName)) {
                 showAlert("Error", "Album name already exists.");
             } else {
-                Album newAlbum = new Album(albumName);
-                User.currentUser.addAlbums(newAlbum);
-                albumList.add(newAlbum);
                 try {
-                    DataManager.saveUsers(Arrays.asList(User.currentUser));
+                    List<User> users = DataManager.loadUsers(); // Load all users
+    
+                    // Find the current user in the list
+                    Optional<User> existingUser = users.stream()
+                                                       .filter(u -> u.getUsername().equals(User.currentUser.getUsername()))
+                                                       .findFirst();
+    
+                    Album newAlbum = new Album(albumName);
+                    if (existingUser.isPresent()) {
+                        // Update the current user's albums
+                        existingUser.get().addAlbums(newAlbum);
+                    } else {
+                        // If the current user is not in the list, add them
+                        User.currentUser.addAlbums(newAlbum);
+                        users.add(User.currentUser);
+                    }
+    
+                    DataManager.saveUsers(users); // Save the updated list of users
+                    albumList.add(newAlbum); // Update the local album list
                     showAlert("Success", "Album added successfully.");
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -141,10 +156,10 @@ public class AlbumsListController implements Initializable {
         });
     }
 
-private boolean isDuplicateAlbumName(String albumName) {
-    return User.currentUser.getAlbums().stream()
-           .anyMatch(album -> album.getName().equalsIgnoreCase(albumName));
-}
+    private boolean isDuplicateAlbumName(String albumName) {
+        return User.currentUser.getAlbums().stream()
+            .anyMatch(album -> album.getName().equalsIgnoreCase(albumName));
+    }
     
 
     @FXML
@@ -152,7 +167,28 @@ private boolean isDuplicateAlbumName(String albumName) {
         Album itemToRemove = realAlbumList.getSelectionModel().getSelectedItem();
         albumList.remove(itemToRemove);
         User.currentUser.removeAlbum(itemToRemove);
+
+        try {
+            // Load all users
+            List<User> users = DataManager.loadUsers();
+            // Find and update the current user in the list
+            for (User user : users) {
+                if (user.getUsername().equals(User.currentUser.getUsername())) {
+                    user.setAlbums(User.currentUser.getAlbums());
+                    break;
+                }
+            }
+            // Save all users
+            DataManager.saveUsers(users);
+            showAlert("Success", "Album deleted successfully.");
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert("Error", "Failed to delete album.");
+        }
     }
+
+
+
 
     @FXML
     void EditRequest(ActionEvent event) {
@@ -197,26 +233,33 @@ private boolean isDuplicateAlbumName(String albumName) {
              e.printStackTrace();
         }
     }
-
     @FXML
     void SaveRequest(ActionEvent event) {
         try {
-            List<User> users = DataManager.loadUsers();
-            User currentUser = findCurrentUser(users);
-
-            if (currentUser != null) {
-                currentUser.setAlbums(new ArrayList<>(albumList)); // Update the current user's albums
-                DataManager.saveUsers(users); // Save the updated list of users
-                showAlert("Success", "Albums saved successfully.");
+            List<User> users = DataManager.loadUsers(); // Load all users
+    
+            // Find the current user in the list
+            Optional<User> existingUser = users.stream()
+                                               .filter(u -> u.getUsername().equals(User.currentUser.getUsername()))
+                                               .findFirst();
+    
+            if (existingUser.isPresent()) {
+                // Update the current user's albums
+                existingUser.get().setAlbums(new ArrayList<>(albumList));
             } else {
-                showAlert("Error", "Current user not found.");
+                // If the current user is not in the list, add them
+                User.currentUser.setAlbums(new ArrayList<>(albumList));
+                users.add(User.currentUser);
             }
+    
+            DataManager.saveUsers(users); // Save the updated list of users
+            showAlert("Success", "Albums saved successfully.");
         } catch (IOException e) {
             e.printStackTrace();
             showAlert("Error", "Failed to save albums.");
         }
     }
-
+    
     private User findCurrentUser(List<User> users) {
         return users.stream()
                     .filter(u -> u.getUsername().equals(User.currentUser.getUsername()))
