@@ -68,18 +68,18 @@ public class AlbumsListController implements Initializable {
             showAlert("Error", "Failed to load albums.");
         }
         realAlbumList.setItems(albumList);
-        realAlbumList.getSelectionModel().selectedIndexProperty().addListener((obs, oldVal, newVal) -> {
-            if (newVal.intValue() >= 0) { // Make sure an item is selected
-                Album selectedAlbum = realAlbumList.getItems().get(newVal.intValue());
-                if (Photo.tempMove != null) {
-                    selectedAlbum.addPhoto(Photo.tempMove);
-                    Photo.tempMove = null;
-                } else if (Photo.tempCopy != null) {
-                    selectedAlbum.addPhoto(Photo.tempCopy);
-                    Photo.tempCopy = null;
-                }
-            }
-        });
+        // realAlbumList.getSelectionModel().selectedIndexProperty().addListener((obs, oldVal, newVal) -> {
+        //     if (newVal.intValue() >= 0) { // Make sure an item is selected
+        //         Album selectedAlbum = realAlbumList.getItems().get(newVal.intValue());
+        //           if (Photo.tempMove != null) {
+        //             selectedAlbum.addPhoto(Photo.tempMove);
+        //             Photo.tempMove = null;
+        //         } else if (Photo.tempCopy != null) {
+        //             selectedAlbum.addPhoto(Photo.tempCopy);
+        //             Photo.tempCopy = null;
+        //         }
+        //     }      
+        // });
 
     }
 
@@ -157,6 +157,17 @@ private boolean isDuplicateAlbumName(String albumName) {
     @FXML
     void EditRequest(ActionEvent event) {
         Album.currentAlbum = realAlbumList.getSelectionModel().getSelectedItem();
+        if(Photo.tempMove != null)
+        {
+            Album.currentAlbum.addPhoto(Photo.tempMove);
+            Photo.tempMove = null;
+        }
+        if(Photo.tempCopy != null)
+        {
+            Album.currentAlbum.addPhoto(Photo.tempCopy);
+            Photo.tempCopy =null;
+        }
+
         try{
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AlbumDisplay.fxml"));
             Stage stage = (Stage) EditButton.getScene().getWindow();
