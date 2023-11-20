@@ -11,8 +11,10 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import model.Album;
 import model.User;
+import utils.DataManager;
 import javafx.fxml.FXMLLoader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import javafx.collections.ObservableList;
@@ -41,25 +43,36 @@ public class AlbumsListController implements Initializable {
 
 
     @Override
-    public void initialize(URL location, ResourceBundle bundle)
-    {
-        albumList.addAll(User.currentUser.getAlbums());
-        realAlbumList.setItems(albumList);
-         realAlbumList.getSelectionModel().selectedIndexProperty().addListener( (obs, oldVal, newVal) -> {
-        if (newVal.intValue() >= 0) { // Make sure an item is selected
-            Album selectedAlbum = realAlbumList.getItems().get(newVal.intValue());
-            if(Photo.tempMove != null)
-            {
-                selectedAlbum.addPhoto(Photo.tempMove);
-                Photo.tempMove = null;
+    public void initialize(URL location, ResourceBundle bundle) {
+        try {
+            // Load users and find the current user
+            List<User> users = DataManager.loadUsers();
+            User currentUser = findCurrentUser(users);
+
+            if (currentUser != null) {
+                // Update the current user's albums from the loaded data
+                User.currentUser.setAlbums(currentUser.getAlbums());
+                albumList.addAll(User.currentUser.getAlbums()); // Load albums from the current user
+            } else {
+                showAlert("Error", "Current user not found.");
             }
-            else if(Photo.tempCopy != null)
-            {
-                selectedAlbum.addPhoto(Photo.tempCopy);
-                Photo.tempCopy = null;
-            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert("Error", "Failed to load albums.");
         }
-    });
+        realAlbumList.setItems(albumList);
+        realAlbumList.getSelectionModel().selectedIndexProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal.intValue() >= 0) { // Make sure an item is selected
+                Album selectedAlbum = realAlbumList.getItems().get(newVal.intValue());
+                if (Photo.tempMove != null) {
+                    selectedAlbum.addPhoto(Photo.tempMove);
+                    Photo.tempMove = null;
+                } else if (Photo.tempCopy != null) {
+                    selectedAlbum.addPhoto(Photo.tempCopy);
+                    Photo.tempCopy = null;
+                }
+            }
+        });
     }
 
 
@@ -122,7 +135,36 @@ public class AlbumsListController implements Initializable {
 
     @FXML
     void SaveRequest(ActionEvent event) {
+        try {
+            List<User> users = DataManager.loadUsers();
+            User currentUser = findCurrentUser(users);
 
+            if (currentUser != null) {
+                currentUser.setAlbums(new ArrayList<>(albumList)); // Update the current user's albums
+                DataManager.saveUsers(users); // Save the updated list of users
+                showAlert("Success", "Albums saved successfully.");
+            } else {
+                showAlert("Error", "Current user not found.");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert("Error", "Failed to save albums.");
+        }
+    }
+
+    private User findCurrentUser(List<User> users) {
+        return users.stream()
+                    .filter(u -> u.getUsername().equals(User.currentUser.getUsername()))
+                    .findFirst()
+                    .orElse(null);
+    }
+
+    private void showAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 
     @FXML

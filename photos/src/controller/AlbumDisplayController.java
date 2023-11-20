@@ -3,6 +3,7 @@ package controller;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.ResourceBundle;
 
 
@@ -13,6 +14,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
@@ -26,6 +28,7 @@ import javafx.stage.Stage;
 import model.Album;
 import model.Photo;
 import model.User;
+import utils.DataManager;
 import javafx.fxml.Initializable;
 
 
@@ -79,8 +82,6 @@ public class AlbumDisplayController implements Initializable{
         Album.currentAlbum.addPhoto(newPhoto);
         newPhoto.setCaption("work");
         realPhotoList.getItems().add(newPhoto);
-    
-    
     }
 
     @FXML
@@ -125,9 +126,6 @@ public class AlbumDisplayController implements Initializable{
              e.printStackTrace();
         }
     }
-    
-
-    
 
     @FXML
     void MoveRequest(ActionEvent event) {
@@ -174,8 +172,41 @@ public class AlbumDisplayController implements Initializable{
 
     @FXML
     void SaveRequest(ActionEvent event) {
-
+        String albumName = Album.currentAlbum.getName().trim();
+    
+        // Check for blank name
+        if (albumName.isEmpty()) {
+            showAlert("Error", "Album name cannot be blank.");
+            return;
+        }
+    
+        // Check for duplicate name
+        boolean isDuplicate = User.currentUser.getAlbums().stream()
+            .anyMatch(album -> !album.equals(Album.currentAlbum) && album.getName().equalsIgnoreCase(albumName));
+    
+        if (isDuplicate) {
+            showAlert("Error", "An album with this name already exists.");
+            return;
+        }
+    
+        // Proceed with saving
+        try {
+            DataManager.saveUsers(Arrays.asList(User.currentUser)); // Assuming User.currentUser contains the current user's data
+            showAlert("Success", "Data saved successfully.");
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert("Error", "Failed to save data.");
+        }
     }
+
+    private void showAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
     
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -208,9 +239,9 @@ public class AlbumDisplayController implements Initializable{
             AlbumName.setText(Album.currentAlbum.getName());
         }
         
-          if(Album.currentAlbum == null) 
+        if(Album.currentAlbum == null) 
         {
-            Album newAlbum = new Album("new");
+            Album newAlbum = new Album("");
             Album.currentAlbum = newAlbum;
             User.currentUser.addAlbums(newAlbum);
         }

@@ -50,11 +50,11 @@ public class AdminPanelController {
     }
 
     private void showError(String message) {
-    Alert alert = new Alert(Alert.AlertType.ERROR);
-    alert.setTitle("Error");
-    alert.setHeaderText(null);
-    alert.setContentText(message);
-    alert.showAndWait();
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
 }
 
     // Method to handle adding a new user
