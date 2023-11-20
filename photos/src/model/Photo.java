@@ -13,6 +13,7 @@ public class Photo implements Serializable {
     private String caption;
     public static Photo tempMove;
     public static Photo tempCopy;
+    public static Photo currentPhoto;
     // Add more fields as needed, like tags
 
     public Photo(File file) {

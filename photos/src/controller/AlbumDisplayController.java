@@ -109,8 +109,22 @@ public class AlbumDisplayController implements Initializable{
 
     @FXML
     void EditPhotoRequest(ActionEvent event) {
-
+        Photo.currentPhoto = realPhotoList.getSelectionModel().getSelectedItem();
+        try{
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/PhotoView.fxml"));
+            Stage stage = (Stage) EditPhotoButton.getScene().getWindow();
+            Scene scene = new Scene(loader.load());
+            stage.setScene(scene);
+            stage.show();
+        }
+        catch(IOException e)
+        {
+             e.printStackTrace();
+        }
     }
+    
+
+    
 
     @FXML
     void MoveRequest(ActionEvent event) {
