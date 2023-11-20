@@ -62,23 +62,38 @@ public class AdminPanelController {
     private void handleAddUser() {
         String username = newUserField.getText().trim(); // Trim to remove any leading/trailing spaces
 
+        // Check for reserved usernames
         if ("admin".equalsIgnoreCase(username) || "stock".equalsIgnoreCase(username)) {
-            // Show an error message to the user instead of throwing an exception
             showError("The username '" + username + "' is not allowed.");
             return; // Return to prevent further processing
         }
-        if (!username.isEmpty()) {
-            try {
-                DataManager.addUser(new User(username));
-                updateListView(); // Update the ListView after adding a user
-                newUserField.clear();
-            } catch (Exception e) { // Catch a general exception if you're unsure about the specific type
-                e.printStackTrace();
-                // Handle exceptions here, maybe show an error message to the user
-            }
+
+        // Check for blank username
+        if (username.isEmpty()) {
+            showError("Username cannot be blank.");
+            return; // Return to prevent further processing
         }
-        // Add error handling if needed
+
+        // Check for duplicate username
+        try {
+            List<User> users = DataManager.loadUsers();
+            for (User user : users) {
+                if (user.getUsername().equalsIgnoreCase(username)) {
+                    showError("The username '" + username + "' is already taken.");
+                    return; // Return to prevent further processing
+                }
+            }
+
+            // If username is unique, add the user
+            DataManager.addUser(new User(username));
+            updateListView(); // Update the ListView after adding a user
+            newUserField.clear();
+        } catch (Exception e) {
+            e.printStackTrace();
+            // Handle exceptions here, maybe show an error message to the user
+        }
     }
+
     
 
     // Method to handle deleting a user
