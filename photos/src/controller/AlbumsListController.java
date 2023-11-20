@@ -33,7 +33,12 @@ public class AlbumsListController implements Initializable {
     @FXML
     private ListView<Album> realAlbumList;
 
-   
+    @FXML
+    private Button SaveButton;
+
+    @FXML
+    private Button SortButton;
+
 
     @Override
     public void initialize(URL location, ResourceBundle bundle)
@@ -113,6 +118,16 @@ public class AlbumsListController implements Initializable {
         {
              e.printStackTrace();
         }
+    }
+
+    @FXML
+    void SaveRequest(ActionEvent event) {
+
+    }
+
+    @FXML
+    void SortRquest(ActionEvent event) {
+
     }
 
 }

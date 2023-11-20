@@ -64,6 +64,9 @@ public class AlbumDisplayController implements Initializable{
     private TableColumn<Photo, File> ThumbnailPhoto;
 
     @FXML
+    private Button SaveButton;
+
+    @FXML
     void AddPhotoRequest(ActionEvent event) {
         Stage stage = (Stage) ((Button) AddPhotoButton).getScene().getWindow();
 
@@ -167,6 +170,11 @@ public class AlbumDisplayController implements Initializable{
         {
              e.printStackTrace();
         }
+    }
+
+    @FXML
+    void SaveRequest(ActionEvent event) {
+
     }
     
     @Override

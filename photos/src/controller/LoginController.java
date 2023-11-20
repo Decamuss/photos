@@ -32,7 +32,7 @@ public class LoginController {
 
                     // Handle regular user login
                     User.currentUser = new User(username);
-                    //User.currentUser.addAlbums(new Album("test"));
+                    User.currentUser.addAlbums(new Album("test"));
                     loadScene("/view/AlbumsListPage.fxml");
                 }
              else {
