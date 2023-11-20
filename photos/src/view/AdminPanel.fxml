@@ -12,5 +12,7 @@
     <HBox spacing="10">
         <Button text="Add User" onAction="#handleAddUser"/>
         <Button text="Delete User" onAction="#handleDeleteUser"/>
+        <Button fx:id="logoutButton" text="Logout" onAction="#handleLogout"/>
+
     </HBox>
 </VBox>
