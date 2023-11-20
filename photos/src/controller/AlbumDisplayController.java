@@ -137,7 +137,15 @@ public class AlbumDisplayController implements Initializable{
     Photo photoToRemove = Photo.tempMove;
     Album.currentAlbum.removePhoto(photoToRemove);
     Album.currentAlbum = null;
+    
     photoList.remove(photoToRemove);
+            try {
+            DataManager.saveUsers(Arrays.asList(User.currentUser)); // Assuming User.currentUser contains the current user's data
+            showAlert("Success", "Data saved successfully.");
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert("Error", "Failed to save data.");
+        }
      try{
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AlbumsListPage.fxml"));
             Stage stage = (Stage) BackButton.getScene().getWindow();
