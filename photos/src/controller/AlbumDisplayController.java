@@ -133,57 +133,22 @@ public class AlbumDisplayController implements Initializable{
 
     @FXML
     void MoveRequest(ActionEvent event) {
-        Photo selectedPhoto = realPhotoList.getSelectionModel().getSelectedItem();
-        if (selectedPhoto == null) {
-            showAlert("Error", "No photo selected.");
-            return;
+    Photo.tempMove = realPhotoList.getSelectionModel().getSelectedItem();
+    Photo photoToRemove = Photo.tempMove;
+    Album.currentAlbum.removePhoto(photoToRemove);
+    Album.currentAlbum = null;
+    photoList.remove(photoToRemove);
+     try{
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AlbumsListPage.fxml"));
+            Stage stage = (Stage) BackButton.getScene().getWindow();
+            Scene scene = new Scene(loader.load());
+            stage.setScene(scene);
+            stage.show();
         }
-
-        // Create and configure the dialog
-        Dialog<Album> dialog = new Dialog<>();
-        dialog.setTitle("Move Photo");
-        dialog.setHeaderText("Select an Album to Move the Photo");
-
-        // Set the button types
-        ButtonType okButtonType = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
-        dialog.getDialogPane().getButtonTypes().addAll(okButtonType, ButtonType.CANCEL);
-
-        // Create the album list view
-        ListView<Album> albumListView = new ListView<>();
-        ObservableList<Album> albums = FXCollections.observableArrayList(
-            User.currentUser.getAlbums().stream()
-                .filter(album -> !album.equals(Album.currentAlbum))
-                .collect(Collectors.toList())
-        );
-        albumListView.setItems(albums);
-
-        // Set the dialog content
-        dialog.getDialogPane().setContent(albumListView);
-
-        // Convert the result to an album when OK button is clicked
-        dialog.setResultConverter(dialogButton -> {
-            if (dialogButton == okButtonType) {
-                return albumListView.getSelectionModel().getSelectedItem();
-            }
-            return null;
-        });
-
-        // Show the dialog and wait for the user response
-        Optional<Album> result = dialog.showAndWait();
-
-        // Handle the result
-        result.ifPresent(targetAlbum -> {
-            Album.currentAlbum.removePhoto(selectedPhoto);
-            targetAlbum.addPhoto(selectedPhoto);
-            photoList.remove(selectedPhoto);
-            try {
-                DataManager.saveUsers(Arrays.asList(User.currentUser));
-                showAlert("Success", "Photo moved successfully.");
-            } catch (IOException e) {
-                e.printStackTrace();
-                showAlert("Error", "Failed to move photo.");
-            }
-        });
+        catch(IOException e)
+        {
+             e.printStackTrace();
+        }
     }
 
     @FXML
