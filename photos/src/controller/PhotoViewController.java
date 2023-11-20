@@ -6,6 +6,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 
 public class PhotoViewController {
@@ -14,13 +15,19 @@ public class PhotoViewController {
     private Button AddTagButton;
 
     @FXML
-    private Label Caption;
+    private TextField Caption;
 
     @FXML
     private Label Date;
 
     @FXML
+    private Button PVSaveButton;
+
+    @FXML
     private ImageView PhotoPreview;
+
+    @FXML
+    private Button RemoveTagButton;
 
     @FXML
     private Button ReturnButton;
@@ -40,7 +47,22 @@ public class PhotoViewController {
     }
 
     @FXML
+    void PVSaveRequest(ActionEvent event) {
+
+    }
+
+    @FXML
     void PreviousScreenRequest(ActionEvent event) {
+
+    }
+
+    @FXML
+    void RenameCaption(ActionEvent event) {
+
+    }
+
+    @FXML
+    void RequestRemoveTag(ActionEvent event) {
 
     }
 
