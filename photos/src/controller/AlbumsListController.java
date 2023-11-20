@@ -46,8 +46,7 @@ public class AlbumsListController implements Initializable {
     private Button SaveButton;
 
     @FXML
-    private Button SortButton;
-
+    private Button SearchButton;
 
     @Override
     public void initialize(URL location, ResourceBundle bundle) {
@@ -276,8 +275,8 @@ public class AlbumsListController implements Initializable {
     }
 
     @FXML
-    void SortRquest(ActionEvent event) {
-
+    void SearchRequest(ActionEvent event) {
+        
     }
 
 }

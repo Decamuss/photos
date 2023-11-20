@@ -13,7 +13,7 @@
       <Button layoutX="107.0" layoutY="10.0" mnemonicParsing="false" onAction="#AddRequest" text="Add" />
       <Button layoutX="155.0" layoutY="10.0" mnemonicParsing="false" onAction="#DeleteRequest" text="Delete" />
       <Button fx:id="EditButton" layoutX="215.0" layoutY="10.0" mnemonicParsing="false" onAction="#EditRequest" text="Edit" />
-      <Button fx:id="SortButton" layoutX="260.0" layoutY="10.0" mnemonicParsing="false" onAction="#SortRquest" text="Sort" />
+      <Button fx:id="SearchButton" layoutX="260.0" layoutY="10.0" mnemonicParsing="false" onAction="#SearchRequest" text="Search" />
       <Button fx:id="SaveButton" layoutX="308.0" layoutY="10.0" mnemonicParsing="false" onAction="#SaveRequest" text="Save" />
    </children>
 </Pane>
