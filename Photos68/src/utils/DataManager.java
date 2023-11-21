@@ -11,7 +11,7 @@ import model.User;
 
 public class DataManager {
 
-    private static final String FILE_PATH = "photos/data/users.ser"; // Updated file path
+    private static final String FILE_PATH = "data/users.ser"; // Updated file path
 
     public static void saveUsers(List<User> users) throws IOException {
         try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(FILE_PATH))) {

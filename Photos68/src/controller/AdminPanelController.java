@@ -63,7 +63,7 @@ public class AdminPanelController {
         String username = newUserField.getText().trim(); // Trim to remove any leading/trailing spaces
 
         // Check for reserved usernames
-        if ("admin".equalsIgnoreCase(username) || "stock".equalsIgnoreCase(username)) {
+        if ("admin".equalsIgnoreCase(username)) {
             showError("The username '" + username + "' is not allowed.");
             return; // Return to prevent further processing
         }

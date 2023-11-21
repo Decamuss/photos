@@ -116,7 +116,7 @@ public class AlbumDisplayController implements Initializable{
             // If no duplicate is found, proceed to add the new photo
             Photo newPhoto = new Photo(selectedFile);
             Album.currentAlbum.addPhoto(newPhoto);
-            newPhoto.setCaption("work");
+            newPhoto.setCaption("");
             realPhotoList.getItems().add(newPhoto);
         }
         
