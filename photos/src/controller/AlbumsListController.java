@@ -1,5 +1,6 @@
 package controller;
 
+import javafx.application.Platform;
 import javafx.beans.Observable;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -67,19 +68,19 @@ public class AlbumsListController implements Initializable {
             showAlert("Error", "Failed to load albums.");
         }
         realAlbumList.setItems(albumList);
-        // realAlbumList.getSelectionModel().selectedIndexProperty().addListener((obs, oldVal, newVal) -> {
-        //     if (newVal.intValue() >= 0) { // Make sure an item is selected
-        //         Album selectedAlbum = realAlbumList.getItems().get(newVal.intValue());
-        //           if (Photo.tempMove != null) {
-        //             selectedAlbum.addPhoto(Photo.tempMove);
-        //             Photo.tempMove = null;
-        //         } else if (Photo.tempCopy != null) {
-        //             selectedAlbum.addPhoto(Photo.tempCopy);
-        //             Photo.tempCopy = null;
-        //         }
-        //     }      
-        // });
+        Platform.runLater(() -> {
+            // Get the current stage from one of the components
+            Stage stage = (Stage) LogoutButton.getScene().getWindow();
 
+            // Set the close request handler
+            stage.setOnCloseRequest(event -> {
+                // Call the save method
+                SaveRequest(new ActionEvent());
+
+                // Close the stage
+                //event.consume(); // Consume the event if you don't want it to proceed with the default close operation
+            });
+        });
     }
 
 
