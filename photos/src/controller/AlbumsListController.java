@@ -14,6 +14,8 @@ import model.Album;
 import model.User;
 import utils.DataManager;
 import javafx.fxml.FXMLLoader;
+
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -204,16 +206,59 @@ public class AlbumsListController implements Initializable {
     void EditRequest(ActionEvent event) {
         Album.currentAlbum = realAlbumList.getSelectionModel().getSelectedItem();
         if(Photo.tempMove != null)
-        {
-            Album.currentAlbum.addPhoto(Photo.tempMove);
-            Photo.tempMove = null;
+        {   
+            boolean isDuplicate =false;
+            File tempMoveFile = Photo.tempMove.getFile();
+            for (Photo photo : Album.currentAlbum.getPhotos()) {
+                if (tempMoveFile.equals(photo.getFile())) {
+                    isDuplicate = true;
+                    break;  // Exit the loop as soon as a duplicate is found
+                }
         }
-        if(Photo.tempCopy != null)
-        {
-            Album.currentAlbum.addPhoto(Photo.tempCopy);
-            Photo.tempCopy =null;
+            
+            if (isDuplicate) {
+                // Show an error alert for duplicate photo
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Duplicate Photo Cannot be Added");
+                alert.setHeaderText(null);
+                alert.setContentText("Please select a different photo.");
+                alert.showAndWait();
+                return;
+            } else {
+                // If no duplicate is found, proceed to add the new photo
+                Album.currentAlbum.addPhoto(new Photo(tempMoveFile));
+                Photo.tempMove = null;
+            }
         }
 
+        if(Photo.tempCopy != null)
+        {
+            boolean isDuplicate =false;
+            File tempCopyFile = Photo.tempCopy.getFile();
+            for (Photo photo : Album.currentAlbum.getPhotos()) {
+                if (tempCopyFile.equals(photo.getFile())) {
+                    isDuplicate = true;
+                    break;  // Exit the loop as soon as a duplicate is found
+                }
+        }
+            
+            if (isDuplicate) {
+                // Show an error alert for duplicate photo
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Duplicate Photo Cannot be Added");
+                alert.setHeaderText(null);
+                alert.setContentText("Please select a different photo.");
+                alert.showAndWait();
+                return;
+            } else {
+                // If no duplicate is found, proceed to add the new photo
+                Album.currentAlbum.addPhoto(new Photo(tempCopyFile));
+                Photo.tempCopy = null;
+            }
+        }
+        
+        if(Album.currentAlbum!=null)
+        {
         try{
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AlbumDisplay.fxml"));
             Stage stage = (Stage) EditButton.getScene().getWindow();
@@ -225,6 +270,7 @@ public class AlbumsListController implements Initializable {
         {
              e.printStackTrace();
         }
+    }
     }
 
     @FXML
@@ -243,6 +289,8 @@ public class AlbumsListController implements Initializable {
              e.printStackTrace();
         }
     }
+
+
     @FXML
     void SaveRequest(ActionEvent event) {
         try {
@@ -270,12 +318,15 @@ public class AlbumsListController implements Initializable {
         }
     }
     
+
+
     private User findCurrentUser(List<User> users) {
         return users.stream()
                     .filter(u -> u.getUsername().equals(User.currentUser.getUsername()))
                     .findFirst()
                     .orElse(null);
     }
+
 
     private void showAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -284,6 +335,9 @@ public class AlbumsListController implements Initializable {
         alert.setContentText(message);
         alert.showAndWait();
     }
+
+
+    
     @FXML
     void SearchRequest(ActionEvent event) {
         try {
