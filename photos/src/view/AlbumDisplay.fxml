@@ -22,5 +22,7 @@
       <Button fx:id="CopyButton" layoutX="435.0" layoutY="14.0" mnemonicParsing="false" onAction="#CopyRequest" text="Copy" />
       <Button fx:id="BackButton" layoutX="598.0" layoutY="14.0" mnemonicParsing="false" onAction="#ReturnRequest" text="Back" />
       <Button fx:id="SaveButton" layoutX="488.0" layoutY="14.0" mnemonicParsing="false" onAction="#SaveRequest" text="Save" />
+      <!-- Slideshow Button -->
+      <Button fx:id="slideshowButton" layoutX="540.0" layoutY="14.0" mnemonicParsing="false" onAction="#startSlideshow" text="Slideshow" />
    </children>
 </Pane>

@@ -10,6 +10,8 @@ import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
 import javafx.scene.control.TableCell;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -22,6 +24,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -29,8 +32,12 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import model.Album;
 import model.Photo;
 import model.User;
@@ -74,6 +81,10 @@ public class AlbumDisplayController implements Initializable{
 
     @FXML
     private Button SaveButton;
+
+    @FXML
+    private int currentPhotoIndex = 0;
+
 
     @FXML
     void AddPhotoRequest(ActionEvent event) {
@@ -323,5 +334,59 @@ public class AlbumDisplayController implements Initializable{
             });
         });
     }
+    
+    @FXML
+    public void startSlideshow() {
+        if (realPhotoList.getItems().isEmpty()) {
+            // Handle empty album case
+            return;
+        }
 
+        Stage slideshowStage = new Stage();
+        slideshowStage.initModality(Modality.APPLICATION_MODAL);
+
+        VBox vbox = new VBox(10);
+        ImageView imageView = new ImageView();
+        imageView.setPreserveRatio(true);
+        imageView.setFitHeight(300); // Adjust size as needed
+        imageView.setFitWidth(300);  // Adjust size as needed
+
+        Button nextButton = new Button("Next");
+        Button prevButton = new Button("Previous");
+        Label captionLabel = new Label();
+
+        nextButton.setOnAction(e -> showNextPhoto(imageView, captionLabel));
+        prevButton.setOnAction(e -> showPreviousPhoto(imageView, captionLabel));
+
+        vbox.getChildren().addAll(imageView, captionLabel, prevButton, nextButton);
+
+        Scene scene = new Scene(vbox, 400, 400); // Adjust scene size as needed
+        slideshowStage.setScene(scene);
+        slideshowStage.show();
+
+        showPhotoAtIndex(imageView, captionLabel, currentPhotoIndex);
+    }
+
+    private void showNextPhoto(ImageView imageView, Label captionLabel) {
+        if (currentPhotoIndex < realPhotoList.getItems().size() - 1) {
+            currentPhotoIndex++;
+            showPhotoAtIndex(imageView, captionLabel, currentPhotoIndex);
+        }
+    }
+
+    private void showPreviousPhoto(ImageView imageView, Label captionLabel) {
+        if (currentPhotoIndex > 0) {
+            currentPhotoIndex--;
+            showPhotoAtIndex(imageView, captionLabel, currentPhotoIndex);
+        }
+    }
+
+    private void showPhotoAtIndex(ImageView imageView, Label captionLabel, int index) {
+        Photo photo = realPhotoList.getItems().get(index);
+        Image image = new Image(photo.getFile().toURI().toString());
+        imageView.setImage(image);
+        captionLabel.setText(photo.getCaption());
+    }
 }
+
+
