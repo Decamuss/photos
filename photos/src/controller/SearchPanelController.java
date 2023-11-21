@@ -75,10 +75,13 @@ public class SearchPanelController {
         boolean dateInRange = isDateInRange(photo.getDateTaken(), startDate, endDate);
         boolean tagMatches = false;
         if (!tagType.isEmpty() && !tagValue.isEmpty()) {
-            tagMatches = photo.getTags().getOrDefault(tagType, Collections.emptySet()).contains(tagValue);
+            // Check if the tag type exists and its value matches the specified tag value
+            String actualTagValue = photo.getTags().get(tagType);
+            tagMatches = tagValue.equals(actualTagValue);
         }
         return dateInRange && (tagType.isEmpty() || tagMatches);
     }
+    
 
     private boolean isDateInRange(LocalDateTime photoDate, LocalDate startDate, LocalDate endDate) {
         LocalDate photoDateLocal = photoDate.toLocalDate();
