@@ -33,6 +33,13 @@ public class SearchPanelController {
     private TextField tagValueField;
 
     @FXML
+private TextField secondTagTypeField;
+
+@FXML
+private TextField secondTagValueField;
+
+
+    @FXML
     private ListView<Photo> searchResultsListView;
 
     private List<Photo> allPhotos = new ArrayList<>();
@@ -52,34 +59,40 @@ public class SearchPanelController {
             e.printStackTrace();
         }
     }
-
- @FXML
+    @FXML
     private void handleSearchAction() {
         LocalDate startDate = startDatePicker.getValue();
         LocalDate endDate = endDatePicker.getValue();
-        String tagType = tagTypeField.getText().trim();
-        String tagValue = tagValueField.getText().trim();
-
+        String tagType1 = tagTypeField.getText().trim();
+        String tagValue1 = tagValueField.getText().trim();
+        String tagType2 = secondTagTypeField.getText().trim();
+        String tagValue2 = secondTagValueField.getText().trim();
+    
         Set<File> encounteredFiles = new HashSet<>();
-
+    
         List<Photo> filteredPhotos = allPhotos.stream()
-            .filter(photo -> matchesCriteria(photo, startDate, endDate, tagType, tagValue))
+            .filter(photo -> matchesCriteria(photo, startDate, endDate, tagType1, tagValue1, tagType2, tagValue2))
             .filter(photo -> encounteredFiles.add(photo.getFile())) // Filter out duplicates
             .collect(Collectors.toList());
-
+    
         searchResultsListView.getItems().setAll(filteredPhotos);
     }
+    
 
-
-    private boolean matchesCriteria(Photo photo, LocalDate startDate, LocalDate endDate, String tagType, String tagValue) {
+    private boolean matchesCriteria(Photo photo, LocalDate startDate, LocalDate endDate, String tagType1, String tagValue1, String tagType2, String tagValue2) {
         boolean dateInRange = isDateInRange(photo.getDateTaken(), startDate, endDate);
-        boolean tagMatches = false;
+        boolean tagMatches1 = tagMatches(photo, tagType1, tagValue1);
+        boolean tagMatches2 = tagMatches(photo, tagType2, tagValue2);
+    
+        return dateInRange && (tagType1.isEmpty() || tagMatches1) && (tagType2.isEmpty() || tagMatches2);
+    }
+    
+    private boolean tagMatches(Photo photo, String tagType, String tagValue) {
         if (!tagType.isEmpty() && !tagValue.isEmpty()) {
-            // Check if the tag type exists and its value matches the specified tag value
             String actualTagValue = photo.getTags().get(tagType);
-            tagMatches = tagValue.equals(actualTagValue);
+            return tagValue.equals(actualTagValue);
         }
-        return dateInRange && (tagType.isEmpty() || tagMatches);
+        return false;
     }
     
 

@@ -21,14 +21,26 @@
         <DatePicker fx:id="endDatePicker"/>
     </HBox>
 
+    <!-- First pair of tag type and value -->
     <HBox spacing="10">
-        <Label text="Tag Type:"/>
-        <TextField fx:id="tagTypeField" promptText="e.g., location"/>
+        <Label text="First Tag Type:"/>
+        <TextField fx:id="firstTagTypeField" promptText="e.g., location"/>
     </HBox>
 
     <HBox spacing="10">
-        <Label text="Tag Value:"/>
-        <TextField fx:id="tagValueField" promptText="e.g., New York"/>
+        <Label text="First Tag Value:"/>
+        <TextField fx:id="firstTagValueField" promptText="e.g., New York"/>
+    </HBox>
+
+    <!-- Second pair of tag type and value -->
+    <HBox spacing="10">
+        <Label text="Second Tag Type:"/>
+        <TextField fx:id="secondTagTypeField" promptText="e.g., event"/>
+    </HBox>
+
+    <HBox spacing="10">
+        <Label text="Second Tag Value:"/>
+        <TextField fx:id="secondTagValueField" promptText="e.g., Birthday"/>
     </HBox>
 
     <Button text="Search" onAction="#handleSearchAction"/>
