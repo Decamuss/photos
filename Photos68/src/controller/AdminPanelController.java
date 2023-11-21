@@ -15,6 +15,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javafx.scene.control.Button;
+
+/**
+ * Controller class for the admin panel.
+ * This class handles the user interface interactions for managing users in the application.
+ */
 public class AdminPanelController {
 
     @FXML
@@ -26,14 +31,19 @@ public class AdminPanelController {
     @FXML
     private Button logoutButton;
 
-
-    // Initialize method
+    /**
+     * Initializes the controller class.
+     * This method is automatically called after the FXML file has been loaded.
+     */
     @FXML
     public void initialize() {
         updateListView(); // Call updateListView when initializing
     }
 
-    // Method to update the ListView with current users
+    /**
+     * Updates the ListView with the current list of users.
+     * This method fetches users from the data manager and updates the user interface.
+     */
     private void updateListView() {
         List<User> users;
         try {
@@ -49,15 +59,23 @@ public class AdminPanelController {
         }
     }
 
+    /**
+     * Shows an error message in a dialog box.
+     *
+     * @param message The error message to be displayed.
+     */
     private void showError(String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
-}
+    }
 
-    // Method to handle adding a new user
+    /**
+     * Handles the action of adding a new user.
+     * This method is called when the add user button is clicked.
+     */
     @FXML
     private void handleAddUser() {
         String username = newUserField.getText().trim(); // Trim to remove any leading/trailing spaces
@@ -94,9 +112,10 @@ public class AdminPanelController {
         }
     }
 
-    
-
-    // Method to handle deleting a user
+    /**
+     * Handles the action of deleting a selected user.
+     * This method is called when the delete user button is clicked.
+     */
     @FXML
     private void handleDeleteUser() {
         String selectedUser = userList.getSelectionModel().getSelectedItem();
@@ -112,6 +131,11 @@ public class AdminPanelController {
         // Add error handling if needed
     }
 
+    /**
+     * Handles the logout action.
+     * This method is called when the logout button is clicked.
+     * It closes the admin panel and optionally opens the login screen.
+     */
     @FXML
     private void handleLogout() {
         // Close the current stage (admin panel)
@@ -122,6 +146,10 @@ public class AdminPanelController {
         showLoginScreen();
     }
 
+    /**
+     * Shows the login screen.
+     * This method loads and displays the login window.
+     */
     private void showLoginScreen() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/login.fxml"));
@@ -135,8 +163,6 @@ public class AdminPanelController {
             // Handle the exception, maybe show an error message
         }
     }
-
-
 
     // Add more methods as needed
 }

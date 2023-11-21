@@ -44,6 +44,10 @@ import model.User;
 import utils.DataManager;
 import javafx.fxml.Initializable;
 
+/**
+ * Controller class for the album display.
+ * This class manages the user interface for displaying and managing photos within an album.
+ */
 
 public class AlbumDisplayController implements Initializable{
      ObservableList<Photo> photoList = FXCollections.observableArrayList();
@@ -85,6 +89,10 @@ public class AlbumDisplayController implements Initializable{
     @FXML
     private int currentPhotoIndex = 0;
 
+      /**
+     * Handles the request to add a photo to the album.
+     * @param event The event that triggered the request.
+     */
 
     @FXML
     void AddPhotoRequest(ActionEvent event) {
@@ -122,6 +130,11 @@ public class AlbumDisplayController implements Initializable{
         
     }
 
+
+    /**
+     * Handles the request to rename the current album.
+     * @param event The event that triggered the request.
+     */
     @FXML
     void AlbumRenameRequest(ActionEvent event) {
         if(Album.currentAlbum !=null)
@@ -272,6 +285,11 @@ public class AlbumDisplayController implements Initializable{
     }
     
 
+        /**
+     * Shows an alert dialog with a specified title and message.
+     * @param title The title of the alert dialog.
+     * @param message The message to be displayed in the alert dialog.
+     */
 
     private void showAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -281,7 +299,12 @@ public class AlbumDisplayController implements Initializable{
         alert.showAndWait();
     }
 
-    
+    /**
+     * Initializes the controller after its root element has been completely processed.
+     * @param location The location used to resolve relative paths for the root object, or null if unknown.
+     * @param resources The resources used to localize the root object, or null if not localized.
+     */
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
@@ -334,6 +357,10 @@ public class AlbumDisplayController implements Initializable{
             });
         });
     }
+
+        /**
+     * Starts a slideshow of the photos in the album.
+     */
     
     @FXML
     public void startSlideshow() {
