@@ -9,7 +9,7 @@ import utils.DataManager;
 import java.io.IOException;
 import java.util.List;
 
-public class App extends Application {
+public class Photos extends Application {
 
     private static List<User> users;
 
@@ -39,6 +39,6 @@ public class App extends Application {
     }
 
     public static void setUsers(List<User> users) {
-        App.users = users;
+        Photos.users = users;
     }
 }
