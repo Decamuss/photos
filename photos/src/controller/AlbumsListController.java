@@ -128,24 +128,25 @@ public class AlbumsListController implements Initializable {
             } else {
                 try {
                     List<User> users = DataManager.loadUsers(); // Load all users
-    
+        
                     // Find the current user in the list
                     Optional<User> existingUser = users.stream()
                                                        .filter(u -> u.getUsername().equals(User.currentUser.getUsername()))
                                                        .findFirst();
-    
+        
                     Album newAlbum = new Album(albumName);
                     if (existingUser.isPresent()) {
                         // Update the current user's albums
                         existingUser.get().addAlbums(newAlbum);
+                        User.currentUser.addAlbums(newAlbum); // Update the in-memory user data
                     } else {
                         // If the current user is not in the list, add them
                         User.currentUser.addAlbums(newAlbum);
                         users.add(User.currentUser);
                     }
-    
+        
                     DataManager.saveUsers(users); // Save the updated list of users
-                    albumList.add(newAlbum); // Update the local album list
+                    refreshAlbumList(); // Refresh the album list
                     showAlert("Success", "Album added successfully.");
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -153,6 +154,7 @@ public class AlbumsListController implements Initializable {
                 }
             }
         });
+        
     }
 
     private boolean isDuplicateAlbumName(String albumName) {
@@ -187,6 +189,14 @@ public class AlbumsListController implements Initializable {
     }
 
 
+    
+    public void refreshAlbumList() {
+        // Clear the current observable list
+        albumList.clear();
+
+        // Add all albums of the current user to the observable list
+        albumList.addAll(User.currentUser.getAlbums());
+    }
 
 
     @FXML
@@ -223,7 +233,7 @@ public class AlbumsListController implements Initializable {
         try{
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/login.fxml"));
             Stage stage = (Stage) LogoutButton.getScene().getWindow();
-            Scene scene = new Scene(loader.load());
+            Scene scene = new Scene(loader.load(), 300, 275);
             stage.setScene(scene);
             stage.show();
         }
@@ -273,10 +283,38 @@ public class AlbumsListController implements Initializable {
         alert.setContentText(message);
         alert.showAndWait();
     }
-
     @FXML
     void SearchRequest(ActionEvent event) {
-        
+        try {
+            // Load the FXML file
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/SearchPanel.fxml"));
+            Stage stage = new Stage();
+            stage.setScene(new Scene(loader.load())); // Load the FXML file
+            stage.setTitle("Search Photos");
+    
+            // Now get the controller
+            SearchPanelController searchController = loader.getController();
+            if (searchController != null) {
+                searchController.setAlbumsListController(this); // Pass the reference
+            } else {
+                // Handle the case where the controller didn't load properly
+                System.err.println("SearchPanelController is null.");
+                return;
+            }
+    
+            // Show the stage
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+            // Handle the exception
+        }
+    }
+    
+    // In AlbumsListController
+    public void addNewAlbum(Album album) {
+        albumList.add(album);
+        User.currentUser.addAlbums(album);
+        // Save the user data if necessary
     }
 
 }
