@@ -17,12 +17,12 @@
       <TextField fx:id="AlbumName" layoutX="28.0" layoutY="14.0" onAction="#AlbumRenameRequest" promptText="Album Name" />
       <Button fx:id="AddPhotoButton" layoutX="184.0" layoutY="14.0" mnemonicParsing="false" onAction="#AddPhotoRequest" text="Add" />
       <Button fx:id="RemovePhotoButton" layoutX="228.0" layoutY="14.0" mnemonicParsing="false" onAction="#RemovePhotoRequest" text="Remove" />
-      <Button fx:id="EditPhotoButton" layoutX="297.0" layoutY="14.0" mnemonicParsing="false" onAction="#EditPhotoRequest" text="Edit Photo" />
-      <Button fx:id="MoveButton" layoutX="379.0" layoutY="14.0" mnemonicParsing="false" onAction="#MoveRequest" text="Move" />
-      <Button fx:id="CopyButton" layoutX="435.0" layoutY="14.0" mnemonicParsing="false" onAction="#CopyRequest" text="Copy" />
+      <Button fx:id="EditPhotoButton" layoutX="295.0" layoutY="14.0" mnemonicParsing="false" onAction="#EditPhotoRequest" text="Edit Photo" />
+      <Button fx:id="MoveButton" layoutX="373.0" layoutY="14.0" mnemonicParsing="false" onAction="#MoveRequest" text="Move" />
+      <Button fx:id="CopyButton" layoutX="425.0" layoutY="14.0" mnemonicParsing="false" onAction="#CopyRequest" text="Copy" />
       <Button fx:id="BackButton" layoutX="598.0" layoutY="14.0" mnemonicParsing="false" onAction="#ReturnRequest" text="Back" />
-      <Button fx:id="SaveButton" layoutX="488.0" layoutY="14.0" mnemonicParsing="false" onAction="#SaveRequest" text="Save" />
+      <Button fx:id="SaveButton" layoutX="476.0" layoutY="14.0" mnemonicParsing="false" onAction="#SaveRequest" text="Save" />
       <!-- Slideshow Button -->
-      <Button fx:id="slideshowButton" layoutX="540.0" layoutY="14.0" mnemonicParsing="false" onAction="#startSlideshow" text="Slideshow" />
+      <Button fx:id="slideshowButton" layoutX="523.0" layoutY="14.0" mnemonicParsing="false" onAction="#startSlideshow" text="Slideshow" />
    </children>
 </Pane>
