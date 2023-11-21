@@ -10,7 +10,7 @@ public class Photo implements Serializable {
     private File file;
     private LocalDateTime dateTaken;
     private String caption;
-    private Map<String, Set<String>> tags; // Map to store tags with their values
+    private Map<String, String> tags; // Map to store tags with their values
 
     public static Photo tempMove;
     public static Photo tempCopy;
@@ -45,19 +45,22 @@ public class Photo implements Serializable {
     }
 
     public void addTag(String type, String value) {
-        tags.computeIfAbsent(type, k -> new HashSet<>()).add(value);
+        tags.put(type, value);
     }
 
     public void removeTag(String type, String value) {
-        if (tags.containsKey(type)) {
-            tags.get(type).remove(value);
-            if (tags.get(type).isEmpty()) {
-                tags.remove(type);
-            }
-        }
+        tags.remove(type);
     }
 
-    public Map<String, Set<String>> getTags() {
+    public Set<String> getTagKeys() {
+        return tags.keySet();
+    }
+
+    public Collection<String> getTagValues() {
+        return tags.values();
+    }
+
+    public Map<String, String> getTags() {
         return tags;
     }
 

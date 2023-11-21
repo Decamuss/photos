@@ -83,10 +83,31 @@ public class AlbumDisplayController implements Initializable{
         fileChooser.getExtensionFilters().addAll(
         new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.gif", "*.bmp", "*.jpeg"));
         selectedFile = fileChooser.showOpenDialog(stage);
-        Photo newPhoto = new Photo(selectedFile);
-        Album.currentAlbum.addPhoto(newPhoto);
-        newPhoto.setCaption("work");
-        realPhotoList.getItems().add(newPhoto);
+       
+        // Check for duplicate photos
+        boolean isDuplicate = false;
+        for (Photo photo : Album.currentAlbum.getPhotos()) {
+            if (selectedFile.equals(photo.getFile())) {
+                isDuplicate = true;
+                break;  // Exit the loop as soon as a duplicate is found
+            }
+        }
+
+        if (isDuplicate) {
+            // Show an error alert for duplicate photo
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Duplicate Photo Cannot be Added");
+            alert.setHeaderText(null);
+            alert.setContentText("Please select a different photo.");
+            alert.showAndWait();
+        } else {
+            // If no duplicate is found, proceed to add the new photo
+            Photo newPhoto = new Photo(selectedFile);
+            Album.currentAlbum.addPhoto(newPhoto);
+            newPhoto.setCaption("work");
+            realPhotoList.getItems().add(newPhoto);
+        }
+        
     }
 
     @FXML
