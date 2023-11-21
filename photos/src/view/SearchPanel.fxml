@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.SearchPanelController">
+    <padding>
+        <Insets top="10" right="10" bottom="10" left="10"/>
+    </padding>
+
+    <Label text="Search Photos"/>
+
+    <HBox spacing="10">
+        <Label text="Start Date:"/>
+        <DatePicker fx:id="startDatePicker"/>
+    </HBox>
+
+    <HBox spacing="10">
+        <Label text="End Date:"/>
+        <DatePicker fx:id="endDatePicker"/>
+    </HBox>
+
+    <HBox spacing="10">
+        <Label text="Tag Type:"/>
+        <TextField fx:id="tagTypeField" promptText="e.g., location"/>
+    </HBox>
+
+    <HBox spacing="10">
+        <Label text="Tag Value:"/>
+        <TextField fx:id="tagValueField" promptText="e.g., New York"/>
+    </HBox>
+
+    <Button text="Search" onAction="#handleSearchAction"/>
+
+    <ListView fx:id="searchResultsListView" prefHeight="200"/>
+
+    <Button text="Create Album from Selected" onAction="#handleCreateAlbumAction"/>
+</VBox>

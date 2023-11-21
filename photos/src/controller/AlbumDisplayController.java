@@ -10,6 +10,7 @@ import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
 import javafx.scene.control.TableCell;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -307,6 +308,20 @@ public class AlbumDisplayController implements Initializable{
             Album.currentAlbum = newAlbum;
             User.currentUser.addAlbums(newAlbum);
         }
+
+        Platform.runLater(() -> {
+            // Get the current stage from one of the components
+            Stage stage = (Stage) SaveButton.getScene().getWindow();
+
+            // Set the close request handler
+            stage.setOnCloseRequest(event -> {
+                // Call the save method
+                SaveRequest(new ActionEvent());
+
+                // Close the stage
+                //stage.close();
+            });
+        });
     }
 
 }
