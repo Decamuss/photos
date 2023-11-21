@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -74,8 +75,9 @@ public class PhotoViewController implements Initializable {
     private Image ImageToView;
 
     ObservableList<Map.Entry<String,String>> tagList = FXCollections.observableArrayList();
+
     @Override
-     public void initialize(URL location, ResourceBundle bundle) {
+    public void initialize(URL location, ResourceBundle bundle) {
         // Load the image from a file
         
 
@@ -166,6 +168,8 @@ public class PhotoViewController implements Initializable {
                     alert.showAndWait();
                 }
             }
+        updateTagTableView();
+
     
     }
 
@@ -175,9 +179,60 @@ public class PhotoViewController implements Initializable {
             return tag.matches(".+:.+");
         }
 
-    @FXML
-    void PVSaveRequest(ActionEvent event) {
 
+        @FXML
+        void PVSaveRequest(ActionEvent event) {
+            // Get the current photo
+            Photo currentPhoto = Photo.currentPhoto;
+        
+            // Update the caption
+            String newCaption = Caption.getText();
+            currentPhoto.setCaption(newCaption);
+        
+            // Update the tags directly without clearing
+            // Assuming tagList is up-to-date with the current UI
+            Map<String, String> updatedTags = new HashMap<>();
+            for (Map.Entry<String, String> entry : tagList) {
+                updatedTags.put(entry.getKey(), entry.getValue());
+            }
+            currentPhoto.getTags().clear();
+            currentPhoto.getTags().putAll(updatedTags);
+        
+            // Update this photo across all albums of the current user
+            User currentUser = User.currentUser;
+            for (Album album : currentUser.getAlbums()) {
+                for (Photo photo : album.getPhotos()) {
+                    if (photo.getFile().equals(currentPhoto.getFile())) {
+                        photo.setCaption(newCaption);
+                        photo.getTags().clear();
+                        photo.getTags().putAll(updatedTags);
+                    }
+                }
+            }
+        
+            // Save the updated user
+            try {
+                List<User> users = DataManager.loadUsers();
+                users.removeIf(user -> user.getUsername().equals(currentUser.getUsername()));
+                users.add(currentUser);
+                DataManager.saveUsers(users);
+        
+                // Show success alert
+                showAlert("Save Successful", "Your changes have been saved successfully.");
+            } catch (IOException e) {
+                e.printStackTrace();
+                // Show error alert
+                showAlert("Save Error", "An error occurred while saving. Please try again.");
+            }
+        }
+        
+        
+
+
+    private void updateTagTableView() {
+        tagList.clear();
+        tagList.addAll(Photo.currentPhoto.getTags().entrySet());
+        TagTable.getItems().setAll(tagList);
     }
 
     @FXML
@@ -207,7 +262,11 @@ public class PhotoViewController implements Initializable {
 
     @FXML
     void RequestRemoveTag(ActionEvent event) {
-
+        Map.Entry<String, String> selectedTag = TagTable.getSelectionModel().getSelectedItem();
+        if (selectedTag != null) {
+            Photo.currentPhoto.removeTag(selectedTag.getKey(), selectedTag.getValue());
+            updateTagTableView();
+        }
     }
 
     private void showAlert(String title, String message) {
