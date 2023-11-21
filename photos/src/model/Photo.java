@@ -49,8 +49,10 @@ public class Photo implements Serializable {
     }
 
     public void removeTag(String type, String value) {
-        tags.remove(type);
+        tags.entrySet().removeIf(entry -> entry.getKey().equals(type) && entry.getValue().equals(value));
     }
+    
+    
 
     public Set<String> getTagKeys() {
         return tags.keySet();
