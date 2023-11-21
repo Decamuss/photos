@@ -1,11 +1,13 @@
 package controller;
 
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ComboBox;
 import model.Photo;
 import model.Album;
 import model.User;
@@ -38,6 +40,9 @@ private TextField secondTagTypeField;
 @FXML
 private TextField secondTagValueField;
 
+@FXML
+private ComboBox<String> searchLogicComboBox;
+
 
     @FXML
     private ListView<Photo> searchResultsListView;
@@ -58,6 +63,8 @@ private TextField secondTagValueField;
         } catch (Exception e) {
             e.printStackTrace();
         }
+        searchLogicComboBox.setItems(FXCollections.observableArrayList("AND", "OR"));
+        searchLogicComboBox.getSelectionModel().selectFirst(); // Default to AND
     }
     @FXML
     private void handleSearchAction() {
@@ -69,9 +76,10 @@ private TextField secondTagValueField;
         String tagValue2 = secondTagValueField.getText().trim();
     
         Set<File> encounteredFiles = new HashSet<>();
-    
+        String logic = searchLogicComboBox.getValue();
+
         List<Photo> filteredPhotos = allPhotos.stream()
-            .filter(photo -> matchesCriteria(photo, startDate, endDate, tagType1, tagValue1, tagType2, tagValue2))
+            .filter(photo -> matchesCriteria(photo, startDate, endDate, tagType1, tagValue1, tagType2, tagValue2, logic))
             .filter(photo -> encounteredFiles.add(photo.getFile())) // Filter out duplicates
             .collect(Collectors.toList());
     
@@ -79,14 +87,17 @@ private TextField secondTagValueField;
     }
     
 
-    private boolean matchesCriteria(Photo photo, LocalDate startDate, LocalDate endDate, String tagType1, String tagValue1, String tagType2, String tagValue2) {
+    private boolean matchesCriteria(Photo photo, LocalDate startDate, LocalDate endDate, String tagType1, String tagValue1, String tagType2, String tagValue2, String logic) {
         boolean dateInRange = isDateInRange(photo.getDateTaken(), startDate, endDate);
         boolean tagMatches1 = tagMatches(photo, tagType1, tagValue1);
         boolean tagMatches2 = tagMatches(photo, tagType2, tagValue2);
     
-        return dateInRange && (tagType1.isEmpty() || tagMatches1) && (tagType2.isEmpty() || tagMatches2);
+        if ("AND".equals(logic)) {
+            return dateInRange && (tagType1.isEmpty() || tagMatches1) && (tagType2.isEmpty() || tagMatches2);
+        } else { // OR logic
+            return dateInRange && ((tagType1.isEmpty() || tagMatches1) || (tagType2.isEmpty() || tagMatches2));
+        }
     }
-    
     private boolean tagMatches(Photo photo, String tagType, String tagValue) {
         if (!tagType.isEmpty() && !tagValue.isEmpty()) {
             String actualTagValue = photo.getTags().get(tagType);

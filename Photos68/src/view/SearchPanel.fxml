@@ -24,12 +24,12 @@
     <!-- First pair of tag type and value -->
     <HBox spacing="10">
         <Label text="First Tag Type:"/>
-        <TextField fx:id="firstTagTypeField" promptText="e.g., location"/>
+        <TextField fx:id="tagTypeField" promptText="e.g., location"/>
     </HBox>
 
     <HBox spacing="10">
         <Label text="First Tag Value:"/>
-        <TextField fx:id="firstTagValueField" promptText="e.g., New York"/>
+        <TextField fx:id="tagValueField" promptText="e.g., New York"/>
     </HBox>
 
     <!-- Second pair of tag type and value -->
@@ -41,6 +41,12 @@
     <HBox spacing="10">
         <Label text="Second Tag Value:"/>
         <TextField fx:id="secondTagValueField" promptText="e.g., Birthday"/>
+    </HBox>
+
+    <!-- Search Logic ComboBox -->
+    <HBox spacing="10">
+        <Label text="Search Logic:"/>
+        <ComboBox fx:id="searchLogicComboBox" prefWidth="150"/>
     </HBox>
 
     <Button text="Search" onAction="#handleSearchAction"/>
